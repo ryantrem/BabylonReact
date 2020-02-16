@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import * as Babylon from 'babylonjs';
 import './App.css';
-import { BabylonView, useBabylonEngine } from './BabylonReact'
+import * as BabylonReact from './BabylonReact'
 
 function App() {
-  const engine = useBabylonEngine();
+  const engine = BabylonReact.useEngine();
   const [camera1, setCamera1] = useState<Babylon.Camera>();
   const [camera2, setCamera2] = useState<Babylon.Camera>();
 
@@ -62,8 +62,8 @@ function App() {
         >
           Learn React
         </a>
-        <BabylonView camera={camera1} />
-        <BabylonView camera={camera2} />
+        <BabylonReact.EngineView camera={camera1} />
+        <BabylonReact.EngineView camera={camera2} />
       </header>
     </div>
   );

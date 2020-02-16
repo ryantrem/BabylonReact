@@ -7,7 +7,7 @@ type BabylonViewProps = {
   height?: number,
 }
 
-export const BabylonView: FunctionComponent<BabylonViewProps> = (props: BabylonViewProps & React.CanvasHTMLAttributes<HTMLCanvasElement>) => {
+export const EngineView: FunctionComponent<BabylonViewProps> = (props: BabylonViewProps & React.CanvasHTMLAttributes<HTMLCanvasElement>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const BabylonView: FunctionComponent<BabylonViewProps> = (props: BabylonV
   return (<canvas {...opts} ref={canvasRef} />);
 }
 
-export function useBabylonEngine(): Babylon.Engine | undefined {
+export function useEngine(): Babylon.Engine | undefined {
   const [engine, setEngine] = useState<Babylon.Engine>();
 
   useEffect(() => {
