@@ -3,15 +3,17 @@ import * as Babylon from 'babylonjs';
 
 type BabylonViewProps = {
   camera?: Babylon.Camera,
-  width?: number,
-  height?: number,
+  width?: number | string,
+  height?: number | string,
 }
 
-export const EngineView: FunctionComponent<BabylonViewProps> = (props: BabylonViewProps & React.CanvasHTMLAttributes<HTMLCanvasElement>) => {
+export const EngineView: FunctionComponent<BabylonViewProps> = (props: BabylonViewProps) => {
+  const divRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (canvasRef.current && props.camera) {
+    if (divRef.current && canvasRef.current && props.camera) {
+      const div = divRef.current;
       const canvas = canvasRef.current;
       const camera = props.camera;
       const scene = camera.getScene();
@@ -27,27 +29,29 @@ export const EngineView: FunctionComponent<BabylonViewProps> = (props: BabylonVi
 
       engine.registerView(canvas, camera);
 
+      const onBeforeRender = () => {
+        canvas.width = div.offsetWidth;
+        canvas.height = div.offsetHeight;
+      };
+
+      const beforeRenderObserver = scene.onBeforeRenderObservable.add(onBeforeRender);
+
       return () => {
+        scene.onBeforeRenderObservable.remove(beforeRenderObserver);
         camera.detachControl(canvas);
         engine.unRegisterView(canvas);
       }
     }
     return () => {};
-  }, [canvasRef, props.camera]);
+  }, [divRef, canvasRef, props.camera]);
 
-  // 'rest' can contain additional properties that you can flow through to canvas: (id, className, etc.)
-  const { width, height, ...rest } = props;
-  const opts: React.CanvasHTMLAttributes<HTMLCanvasElement> = rest;
-
-  if (width !== undefined) {
-    opts.width = width;
-  }
-
-  if (height !== undefined) {
-    opts.height = height;
-  }
-
-  return (<canvas {...opts} ref={canvasRef} />);
+  return (
+    <>
+      <div ref={divRef} style={{width: props.width, height: props.height}}>
+        <canvas ref={canvasRef} />
+      </div>
+    </>
+  );
 }
 
 export function useEngine(): Babylon.Engine | undefined {
