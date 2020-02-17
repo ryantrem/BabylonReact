@@ -48,8 +48,8 @@ function App() {
 
   return (
     <div className="App">
-      <BabylonReact.EngineView width={'100%'} height={'400px'} camera={camera1} />
-      <BabylonReact.EngineView width={'100%'} height={'400px'} camera={camera2} />
+      <BabylonReact.EngineView width={'100%'} height={'50%'} camera={camera1} />
+      <BabylonReact.EngineView width={'100%'} height={'50%'} camera={camera2} />
     </div>
   );
 }
