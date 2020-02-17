@@ -54,11 +54,16 @@ export const EngineView: FunctionComponent<BabylonViewProps> = (props: BabylonVi
   );
 }
 
-export function useEngine(): Babylon.Engine | undefined {
+export function useEngine(engineCallback: void | ((engine: Babylon.Engine) => void)): Babylon.Engine | undefined {
   const [engine, setEngine] = useState<Babylon.Engine>();
 
   useEffect(() => {
     const engine = new Babylon.Engine(document.createElement("canvas"), true);
+
+    if (engineCallback) {
+      engineCallback(engine);
+    }
+
     setEngine(engine);
 
     engine.runRenderLoop(() => {
